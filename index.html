@@ -829,6 +829,13 @@
     let currentProjectId = PROJECT_ORDER[0];
     let lastFocusedElement = null;
 
+    function setPageInert(isInert) {
+      document.querySelectorAll('body > header, body > main').forEach((el) => { el.inert = isInert; });
+      drawer.inert = !isInert;
+    }
+
+    drawer.inert = true;
+
     function openCaseStudy(projectKey) {
       const data = PROJECTS_DATA[projectKey];
       if (!data) return;
@@ -854,6 +861,7 @@
 
       drawer.classList.add('open');
       drawer.setAttribute('aria-hidden', 'false');
+      setPageInert(true);
       drawer.querySelector('.drawer-panel').scrollTop = 0;
       document.body.style.overflow = 'hidden';
       document.getElementById('drawer-close-btn').focus({ preventScroll: true });
@@ -862,6 +870,7 @@
     function closeCaseStudy() {
       drawer.classList.remove('open');
       drawer.setAttribute('aria-hidden', 'true');
+      setPageInert(false);
       document.body.style.overflow = '';
       if (lastFocusedElement) lastFocusedElement.focus({ preventScroll: true });
     }
