@@ -1,270 +1,929 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gaston Design — Designer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#0d0d0f;--fg:#f2efe9;--muted:#8a8780;--accent:#ff5b2e;--accent2:#7b5cff;--card:#17171a}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--fg);font-family:Inter,system-ui,sans-serif;overflow-x:hidden;cursor:none}
-a{color:inherit;text-decoration:none}
-h1,h2,h3,.logo{font-family:Syne,system-ui,sans-serif}
-::selection{background:var(--accent);color:#000}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gaston Design — Designer UX/UI & Développeur Front-end</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23012A2D'/%3E%3Ctext x='16' y='21' font-family='monospace' font-size='13' font-weight='600' fill='white' text-anchor='middle'%3EGD%3C/text%3E%3C/svg%3E" />
+  <meta name="description" content="Portfolio de Gaston Design : design produit, UX/UI, design systems et intégration front-end." />
 
-/* Loader */
-.loader{position:fixed;inset:0;background:var(--accent);z-index:100;display:flex;align-items:center;justify-content:center;transition:transform 1s cubic-bezier(.77,0,.18,1) .2s}
-.loader span{font-family:Syne;font-size:clamp(3rem,10vw,8rem);font-weight:800;color:#000}
-body.loaded .loader{transform:translateY(-100%)}
+  <script>
+    try {
+      if (localStorage.getItem('portfolio-theme') === 'dark') document.documentElement.classList.add('dark');
+    } catch (e) {}
+  </script>
 
-/* Cursor */
-.cursor,.cursor-dot{position:fixed;top:0;left:0;pointer-events:none;z-index:99;border-radius:50%;transform:translate(-50%,-50%)}
-.cursor{width:40px;height:40px;border:1px solid var(--fg);transition:width .3s,height .3s,background .3s,border .3s;mix-blend-mode:difference}
-.cursor-dot{width:6px;height:6px;background:var(--fg)}
-.cursor.hover{width:80px;height:80px;background:var(--fg);border-color:transparent}
-@media (hover:none){body{cursor:auto}.cursor,.cursor-dot{display:none}}
+  <script src="https://cdn.tailwindcss.com"></script>
 
-/* Grain + blobs */
-.blob{position:fixed;width:45vw;height:45vw;border-radius:50%;filter:blur(120px);opacity:.35;z-index:-1;animation:float 18s ease-in-out infinite}
-.blob.b1{background:var(--accent);top:-10vw;left:-10vw}
-.blob.b2{background:var(--accent2);bottom:-15vw;right:-10vw;animation-delay:-9s}
-@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(10vw,8vw) scale(1.1)}66%{transform:translate(-5vw,12vw) scale(.9)}}
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
 
-/* Nav */
-nav{position:fixed;top:0;width:100%;display:flex;justify-content:space-between;align-items:center;padding:1.6rem 5vw;z-index:50;mix-blend-mode:difference}
-.logo{font-weight:800;font-size:1.4rem}
-nav ul{display:flex;gap:2.5rem;list-style:none}
-nav a{position:relative;font-size:.95rem}
-nav a::after{content:"";position:absolute;left:0;bottom:-4px;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .4s}
-nav a:hover::after{transform:scaleX(1);transform-origin:left}
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+            display: ['"Space Grotesk"', '"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            cyanAccent: '#2BA4AC',
+            amberAccent: '#F39322',
+            deepTeal: '#012A2D',
+            abyssal: '#061B1D',
+          },
+          transitionTimingFunction: {
+            futuristic: 'cubic-bezier(0.16, 1, 0.3, 1)',
+          }
+        }
+      }
+    };
+  </script>
 
-/* Hero */
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:7rem 5vw 3rem}
-.hero .tag{color:var(--muted);letter-spacing:.2em;text-transform:uppercase;font-size:.8rem;margin-bottom:2rem;display:flex;align-items:center;gap:.8rem}
-.hero .tag::before{content:"";flex:none;width:10px;height:10px;border-radius:50%;background:#3ddc84;box-shadow:0 0 0 0 #3ddc84;animation:pulse 2s infinite}
-@keyframes pulse{70%{box-shadow:0 0 0 12px transparent}100%{box-shadow:0 0 0 0 transparent}}
-.hero h1{font-size:clamp(2rem,6.6vw,8rem);line-height:.92;font-weight:800;letter-spacing:-.03em}
-.line{display:block;overflow:hidden;white-space:nowrap;padding-bottom:.05em}
-.line span{display:inline-block;transform:translateY(110%);transition:transform 1.2s cubic-bezier(.19,1,.22,1)}
-body.loaded .line span{transform:translateY(0)}
-.line:nth-child(2) span{transition-delay:.1s}.line:nth-child(3) span{transition-delay:.2s}.line:nth-child(4) span{transition-delay:.3s}
-.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent));background-size:200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:grad 5s linear infinite}
-@keyframes grad{to{background-position:200%}}
-.hero-bottom{display:flex;justify-content:space-between;align-items:end;margin-top:3rem;gap:2rem;flex-wrap:wrap}
-.hero p{max-width:420px;color:var(--muted);line-height:1.7}
-.scroll{width:28px;height:46px;border:1px solid var(--muted);border-radius:20px;position:relative}
-.scroll::after{content:"";position:absolute;left:50%;top:8px;width:4px;height:8px;background:var(--fg);border-radius:2px;transform:translateX(-50%);animation:sc 1.8s infinite}
-@keyframes sc{to{transform:translate(-50%,18px);opacity:0}}
+  <style>
+    /* ==========================================================================
+       TOKENS — REFONTE LIGHT ÉDITORIAL (IVOIRE, SURFACES BLANCHES, CYAN, AMBRE)
+       ========================================================================== */
+    :root {
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --bg-canvas: #FBFBF9;
+      --bg-surface: #FFFFFF;
+      --bg-surface-elevated: rgba(255, 255, 255, 0.88);
+      --border-hairline: #E7ECEC;
+      --text-primary: #012A2D;
+      --text-secondary: #5F6B6D;
+      --accent: #2BA4AC;
+      --accent-soft: rgba(43, 164, 172, 0.08);
+      --card-shadow: 0 18px 40px -24px rgba(1, 42, 45, 0.16);
+    }
 
-/* Marquee */
-.marquee{border-block:1px solid #2a2a2e;padding:1.6rem 0;overflow:hidden;white-space:nowrap}
-.marquee-track{display:inline-flex;animation:mq 25s linear infinite}
-.marquee span{font-family:Syne;font-size:clamp(2rem,5vw,4rem);font-weight:700;padding:0 2rem;display:flex;align-items:center;gap:4rem}
-.marquee span::after{content:"✦";color:var(--accent);font-size:.6em}
-.marquee:hover .marquee-track{animation-play-state:paused}
-@keyframes mq{to{transform:translateX(-50%)}}
+    html.dark {
+      --bg-canvas: #061B1D;
+      --bg-surface: #012A2D;
+      --bg-surface-elevated: rgba(1, 42, 45, 0.9);
+      --border-hairline: rgba(43, 164, 172, 0.22);
+      --text-primary: #F0F9FA;
+      --text-secondary: #94B8BC;
+      --accent: #2BA4AC;
+      --accent-soft: rgba(43, 164, 172, 0.14);
+      --card-shadow: 0 24px 48px -20px rgba(0, 0, 0, 0.5);
+    }
 
-section{padding:10rem 5vw}
-.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:5rem;flex-wrap:wrap;gap:1rem}
-.section-head h2{font-size:clamp(2.5rem,6vw,5.5rem);font-weight:800;letter-spacing:-.02em;line-height:1}
-.section-head small{color:var(--muted)}
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.45s ease, color 0.45s ease;
+    }
 
-/* Reveal */
-.reveal{opacity:0;transform:translateY(60px);transition:opacity 1s,transform 1s cubic-bezier(.19,1,.22,1)}
-.reveal.in{opacity:1;transform:none}
+    .theme-surface { background-color: var(--bg-surface); }
+    .theme-canvas { background-color: var(--bg-canvas); }
+    .theme-border { border-color: var(--border-hairline); }
+    .theme-text { color: var(--text-primary); }
+    .theme-muted { color: var(--text-secondary); }
+    .hover\:theme-text:hover { color: var(--text-primary); }
 
-/* Projects */
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3rem}
-.project:nth-child(even){margin-top:8rem}
-.project .thumb{aspect-ratio:4/5;border-radius:18px;overflow:hidden;position:relative;transform-style:preserve-3d;transition:transform .2s ease-out}
-.project .art{position:absolute;inset:0;transition:transform 1.2s cubic-bezier(.19,1,.22,1)}
-.project:hover .art{transform:scale(1.08) rotate(-1deg)}
-.project .view{position:absolute;inset:auto 1.5rem 1.5rem auto;background:var(--fg);color:#000;padding:.8rem 1.4rem;border-radius:99px;font-weight:500;transition:.5s}
-.project:hover .view{background:var(--accent);transform:translateY(-6px)}
-.project .meta{display:flex;justify-content:space-between;margin-top:1.3rem}
-.project h3{font-size:1.6rem}
-.project .meta span{color:var(--muted)}
-.a1{background:radial-gradient(circle at 30% 30%,#ffb199,transparent 50%),linear-gradient(135deg,#ff5b2e,#c21d6b)}
-.a2{background:radial-gradient(circle at 70% 60%,#9ef0ff,transparent 45%),linear-gradient(160deg,#1a1aff,#7b5cff)}
-.a3{background:conic-gradient(from 90deg at 50% 50%,#f6d365,#fda085,#f6d365)}
-.a4{background:radial-gradient(circle at 50% 120%,#3ddc84,transparent 60%),linear-gradient(#0f2b22,#091a14)}
-.shape{position:absolute;border-radius:50%;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);animation:float2 8s ease-in-out infinite}
-@keyframes float2{50%{transform:translateY(-30px) rotate(20deg)}}
-.a1 .shape{width:45%;height:45%;top:20%;left:28%}
-.a2 .shape{width:60%;height:30%;border-radius:999px;top:35%;left:20%;animation-duration:6s}
-.a3 .shape{width:40%;height:40%;border-radius:20%;top:30%;left:30%;background:rgba(0,0,0,.15)}
-.a4 .shape{width:30%;height:30%;top:25%;left:35%;box-shadow:0 0 80px #3ddc84}
+    .editorial-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 24px;
+      overflow: hidden;
+      transition:
+        transform 0.45s var(--ease-out-expo),
+        box-shadow 0.45s var(--ease-out-expo),
+        border-color 0.3s ease;
+    }
+    .editorial-card:hover,
+    .editorial-card:focus-visible {
+      transform: translateY(-3px);
+      border-color: rgba(43, 164, 172, 0.45);
+      box-shadow: var(--card-shadow);
+      outline: none;
+    }
+    .editorial-card .card-visual {
+      transition: transform 0.7s var(--ease-out-expo);
+    }
+    .editorial-card:hover .card-visual {
+      transform: scale(1.03);
+    }
 
-/* About */
-.about{display:grid;grid-template-columns:1.2fr 1fr;gap:6rem;align-items:center}
-.about-text{font-size:clamp(1.4rem,2.6vw,2.4rem);line-height:1.35;font-family:Syne;font-weight:500}
-.about-text .w{opacity:.15;transition:opacity .4s}
-.about-text .w.on{opacity:1}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem}
-.stat{border-top:1px solid #2a2a2e;padding-top:1.5rem}
-.stat b{font-family:Syne;font-size:3.5rem;display:block}
-.stat span{color:var(--muted)}
+    /* Apparition douce au chargement / au scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo);
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
 
-/* Services */
-.service{display:grid;grid-template-columns:80px 1fr auto;align-items:center;padding:2.5rem 0;border-bottom:1px solid #2a2a2e;position:relative;overflow:hidden;transition:padding .5s}
-.service::before{content:"";position:absolute;inset:0;background:var(--accent);transform:translateY(101%);transition:transform .6s cubic-bezier(.19,1,.22,1);z-index:-1}
-.service:hover::before{transform:none}
-.service:hover{padding-inline:2rem;color:#000}
-.service .n{color:var(--muted);transition:color .5s}.service:hover .n{color:#000}
-.service h3{font-size:clamp(1.6rem,4vw,3.2rem)}
-.service .arrow{font-size:2rem;transition:transform .5s}
-.service:hover .arrow{transform:rotate(-45deg)}
+    /* Menu mobile */
+    #mobile-menu {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      pointer-events: none;
+      transition: opacity 0.22s var(--ease-out-expo), transform 0.22s var(--ease-out-expo), visibility 0s linear 0.22s;
+    }
+    #mobile-menu.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+      transition-delay: 0s;
+    }
 
-/* Contact */
-.contact{text-align:center;padding-bottom:6rem}
-.contact h2{font-size:clamp(3rem,11vw,11rem);font-weight:800;line-height:.9;letter-spacing:-.03em}
-.btn{display:inline-flex;align-items:center;justify-content:center;width:180px;height:180px;border-radius:50%;background:var(--accent);color:#000;font-weight:500;margin-top:4rem;transition:transform .3s ease-out}
-.btn span{pointer-events:none;transition:transform .3s ease-out}
-footer{display:flex;justify-content:space-between;padding:2rem 5vw;color:var(--muted);border-top:1px solid #2a2a2e;flex-wrap:wrap;gap:1rem}
-footer .socials{display:flex;gap:2rem}
-footer a:hover{color:var(--fg)}
+    /* Tiroir d'étude de cas */
+    .drawer-backdrop {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s var(--ease-out-expo);
+    }
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .drawer-panel {
+      transform: translateX(100%);
+      transition: transform 0.55s var(--ease-out-expo);
+    }
+    .drawer-backdrop.open .drawer-panel {
+      transform: translateX(0%);
+    }
 
-.progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:60;width:0}
-
-@media(max-width:800px){
-  nav{gap:1rem}nav ul{gap:.3rem 1rem;flex-wrap:wrap;justify-content:flex-end}nav a{font-size:.8rem}
-  .hero h1{font-size:7.6vw}
-  .grid,.about{grid-template-columns:1fr}
-  .project:nth-child(even){margin-top:0}
-  section{padding:6rem 5vw}
-  .service{grid-template-columns:50px 1fr auto}
-  .section-head h2{font-size:8.5vw}
-  .contact h2{font-size:10.5vw}
-  footer .socials{flex-wrap:wrap;gap:1rem 1.5rem}
-}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}body{cursor:auto}.cursor,.cursor-dot,.loader{display:none}.reveal,.line span{opacity:1;transform:none}.about-text .w{opacity:1}.marquee{white-space:normal}.marquee-track{display:flex;flex-wrap:wrap;justify-content:center;row-gap:1rem}.marquee span:nth-child(n+7){display:none}.marquee span{font-size:clamp(1.2rem,4vw,2rem);padding:0 .8rem;gap:1.6rem}}
-</style>
-<noscript><style>body{cursor:auto}.cursor,.cursor-dot,.loader{display:none}.line span,.reveal{transform:none;opacity:1}.about-text{opacity:1}</style></noscript>
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-canvas); }
+    ::-webkit-scrollbar-thumb { background: #94A3B8; border-radius: 9999px; }
+  </style>
 </head>
-<body>
-<div class="loader"><span id="count">0</span></div>
-<div class="progress"></div>
-<div class="cursor"></div><div class="cursor-dot"></div>
-<div class="blob b1"></div><div class="blob b2"></div>
+<body class="selection:bg-cyanAccent/20 selection:text-cyanAccent">
 
-<nav>
-  <a href="#" class="logo">GD.</a>
-  <ul>
-    <li><a href="#work">Projets</a></li>
-    <li><a href="#about">À propos</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
+  <!-- ========================================================================
+       HEADER
+       ======================================================================== -->
+  <header class="pointer-events-none fixed inset-x-0 top-0 z-40 px-4 pt-4 sm:px-8">
+    <div class="pointer-events-auto mx-auto flex max-w-6xl items-center justify-between gap-3 rounded-full border theme-border px-4 py-2.5 backdrop-blur-xl" style="background-color: var(--bg-surface-elevated);">
+      <a href="#top" class="flex items-center gap-2" aria-label="Retour en haut de page">
+        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-deepTeal font-mono text-xs font-semibold tracking-tighter text-white dark:bg-cyanAccent dark:text-abyssal">GD</span>
+        <span class="text-sm font-semibold tracking-tight theme-text">Gaston Design</span>
+      </a>
 
-<header class="hero">
-  <div class="tag">Disponible pour de nouveaux projets</div>
-  <h1>
-    <span class="line"><span>Gaston Design</span></span>
-    <span class="line"><span><em>Designer</em></span></span>
-    <span class="line"><span>visuel &amp;</span></span>
-    <span class="line"><span>digital.</span></span>
-  </h1>
-  <div class="hero-bottom">
-    <p>Je conçois des identités de marque, des interfaces et des expériences web qui marquent les esprits — basé à Paris, je travaille partout.</p>
-    <div class="scroll"></div>
+      <nav aria-label="Navigation principale" class="hidden items-center gap-1 md:flex">
+        <a href="#section-projets" data-nav="projets" class="nav-link rounded-full px-4 py-2 text-sm transition-colors theme-muted hover:theme-text">Projets</a>
+        <a href="#section-approche" data-nav="approche" class="nav-link rounded-full px-4 py-2 text-sm transition-colors theme-muted hover:theme-text">Approche</a>
+        <a href="#section-experience" data-nav="experience" class="nav-link rounded-full px-4 py-2 text-sm transition-colors theme-muted hover:theme-text">Expérience</a>
+        <a href="#section-contact" data-nav="contact" class="nav-link rounded-full px-4 py-2 text-sm transition-colors theme-muted hover:theme-text">Contact</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <button id="theme-toggle-btn" type="button" aria-label="Basculer entre le mode clair et le mode sombre" class="flex h-9 w-9 items-center justify-center rounded-full border theme-border theme-canvas theme-text transition-colors hover:border-cyanAccent">
+          <svg class="hidden h-4 w-4 text-amberAccent dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+          <svg class="block h-4 w-4 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+        </button>
+
+        <a href="#section-contact" class="hidden items-center gap-2 rounded-full bg-deepTeal px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-cyanAccent dark:bg-cyanAccent dark:text-abyssal dark:hover:bg-amberAccent sm:flex">
+          <span class="h-1.5 w-1.5 rounded-full bg-amberAccent dark:bg-abyssal"></span>
+          Disponible
+        </a>
+
+        <button id="mobile-menu-btn" type="button" aria-label="Ouvrir le menu mobile" aria-expanded="false" aria-controls="mobile-menu" class="flex h-9 w-9 items-center justify-center rounded-full border theme-border theme-text md:hidden">
+          <svg id="icon-menu" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+          <svg id="icon-close" class="hidden h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="mx-auto mt-2 max-w-6xl rounded-3xl border theme-border p-2 backdrop-blur-xl md:hidden" style="background-color: var(--bg-surface-elevated);">
+      <a href="#section-projets" class="mobile-link block rounded-2xl px-4 py-3 text-sm font-medium theme-text transition-colors hover:bg-[var(--accent-soft)]">Projets</a>
+      <a href="#section-approche" class="mobile-link block rounded-2xl px-4 py-3 text-sm font-medium theme-text transition-colors hover:bg-[var(--accent-soft)]">Approche</a>
+      <a href="#section-experience" class="mobile-link block rounded-2xl px-4 py-3 text-sm font-medium theme-text transition-colors hover:bg-[var(--accent-soft)]">Expérience</a>
+      <a href="#section-contact" class="mobile-link block rounded-2xl px-4 py-3 text-sm font-medium theme-text transition-colors hover:bg-[var(--accent-soft)]">Contact</a>
+    </div>
+  </header>
+
+  <main id="top" class="relative z-10">
+
+    <!-- ======================================================================
+         HERO
+         ====================================================================== -->
+    <section id="section-hero" class="mx-auto max-w-6xl px-5 pb-16 pt-32 sm:px-8 sm:pb-24 sm:pt-40">
+      <div class="grid items-center gap-12 lg:grid-cols-12">
+        <div class="reveal lg:col-span-7">
+          <p class="text-sm font-medium text-cyanAccent">Designer UX/UI &amp; Développeur Front-end · Paris &amp; Remote</p>
+
+          <h1 class="mt-5 text-4xl font-semibold leading-[1.05] tracking-[-0.03em] theme-text sm:text-6xl lg:text-[64px]">
+            Des interfaces claires, utiles et mémorables.
+          </h1>
+
+          <p class="mt-6 max-w-xl text-lg leading-relaxed theme-muted">
+            Je conçois des produits numériques clairs, des design systems évolutifs et des micro-interactions fluides qui allient rigueur ergonomique et soin du détail.
+          </p>
+
+          <div class="mt-9 flex flex-wrap gap-3">
+            <a href="#section-projets" class="group inline-flex items-center gap-2 rounded-full bg-deepTeal px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-cyanAccent dark:bg-cyanAccent dark:text-abyssal dark:hover:bg-amberAccent">
+              Explorer les études de cas
+              <svg class="h-4 w-4 transition-transform group-hover:translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+            </a>
+            <button type="button" data-copy-email class="rounded-full border theme-border theme-surface px-6 py-3.5 text-sm font-medium theme-text transition-colors hover:border-cyanAccent">
+              <span data-email-label>hello@gastondesign.com</span>
+            </button>
+          </div>
+
+          <dl class="mt-12 grid max-w-lg grid-cols-3 gap-4 border-t theme-border pt-6">
+            <div>
+              <dt class="text-xs theme-muted">Expérience</dt>
+              <dd class="mt-1 text-xl font-semibold tracking-tight theme-text sm:text-2xl">7+ ans</dd>
+            </div>
+            <div>
+              <dt class="text-xs theme-muted">Produits livrés</dt>
+              <dd class="mt-1 text-xl font-semibold tracking-tight theme-text sm:text-2xl">24</dd>
+            </div>
+            <div>
+              <dt class="text-xs theme-muted">Impact moyen</dt>
+              <dd class="mt-1 text-xl font-semibold tracking-tight text-cyanAccent sm:text-2xl">+38% conv.</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="reveal lg:col-span-5" style="transition-delay: 100ms;">
+          <!-- Remplacez ce bloc par <img src="votre-portrait.jpg" alt="Portrait de Gaston Design" class="aspect-[4/5] w-full object-cover object-top" /> -->
+          <div class="relative overflow-hidden rounded-[32px] border theme-border theme-surface">
+            <div class="flex aspect-[4/5] w-full flex-col justify-between bg-gradient-to-br from-cyanAccent/15 via-transparent to-amberAccent/10 p-8">
+              <div class="flex items-center justify-between font-mono text-[11px] theme-muted">
+                <span>PORTFOLIO</span>
+                <span>© 2026</span>
+              </div>
+              <div class="flex flex-1 items-center justify-center">
+                <span class="flex h-40 w-40 items-center justify-center rounded-full bg-deepTeal font-display text-6xl font-semibold tracking-tight text-white shadow-xl dark:bg-cyanAccent dark:text-abyssal">GD</span>
+              </div>
+              <div class="flex items-end justify-between">
+                <div>
+                  <p class="text-lg font-semibold theme-text">Gaston Design</p>
+                  <p class="text-sm theme-muted">Lead UX/UI &amp; Front-end</p>
+                </div>
+                <span class="h-2.5 w-2.5 rounded-full bg-amberAccent"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         PROJETS
+         ====================================================================== -->
+    <section id="section-projets" class="mx-auto max-w-6xl scroll-mt-24 px-5 py-16 sm:px-8 sm:py-24">
+      <div class="reveal mb-12 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-sm font-medium text-cyanAccent">Projets sélectionnés</p>
+          <h2 class="mt-2 text-3xl font-semibold tracking-tight theme-text sm:text-4xl">Des produits pensés pour durer</h2>
+        </div>
+        <p class="max-w-md text-sm theme-muted">
+          Sélection de projets UX/UI et front-end : recherche, conception d’interface, systèmes visuels et intégration.
+        </p>
+      </div>
+
+      <div id="featured-project"></div>
+      <div id="projects-grid" class="grid gap-6 md:grid-cols-2"></div>
+    </section>
+
+    <!-- ======================================================================
+         APPROCHE (ABOUT + SKILLS + SERVICES)
+         ====================================================================== -->
+    <section id="section-approche" class="mx-auto max-w-6xl scroll-mt-24 px-5 py-16 sm:px-8 sm:py-24">
+      <div class="grid gap-12 lg:grid-cols-12">
+        <div class="reveal lg:col-span-5">
+          <p class="text-sm font-medium text-cyanAccent">Approche</p>
+          <h2 class="mt-3 text-3xl font-semibold tracking-tight theme-text sm:text-4xl">Un design utile, précis et durable</h2>
+          <p class="mt-5 max-w-md text-base leading-relaxed theme-muted">
+            Je conçois des produits digitaux où l’esthétique sert l’usage : comprendre les besoins réels, structurer l’information, puis livrer des interfaces robustes, accessibles et cohérentes.
+          </p>
+          <div id="skills-list" class="mt-7 flex flex-wrap gap-2"></div>
+        </div>
+
+        <div id="pillars-list" class="grid gap-4 lg:col-span-7"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         EXPÉRIENCE
+         ====================================================================== -->
+    <section id="section-experience" class="mx-auto max-w-6xl scroll-mt-24 px-5 py-16 sm:px-8 sm:py-24">
+      <div class="reveal">
+        <p class="text-sm font-medium text-cyanAccent">Parcours</p>
+        <h2 class="mt-3 text-3xl font-semibold tracking-tight theme-text sm:text-4xl">Expérience</h2>
+      </div>
+      <div id="experience-list" class="mt-10 border-t theme-border"></div>
+    </section>
+
+    <!-- ======================================================================
+         CONTACT
+         ====================================================================== -->
+    <section id="section-contact" class="mx-auto max-w-6xl scroll-mt-24 px-5 py-16 sm:px-8 sm:py-24">
+      <div class="reveal rounded-[32px] bg-deepTeal px-6 py-16 text-center dark:border dark:border-cyanAccent/25 sm:px-12">
+        <p class="text-sm font-medium text-amberAccent">Contact</p>
+        <h2 class="mx-auto mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">Travaillons sur votre prochain produit</h2>
+        <p class="mx-auto mt-4 max-w-xl text-base text-white/70">
+          Disponible pour des missions de design produit, UX/UI, design system et intégration front-end.
+        </p>
+        <div class="mt-8 flex flex-wrap justify-center gap-3">
+          <button type="button" data-copy-email class="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-deepTeal transition-colors hover:bg-cyanAccent hover:text-white">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+            <span data-email-label>hello@gastondesign.com</span>
+          </button>
+          <div id="social-links" class="contents"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         FOOTER
+         ====================================================================== -->
+    <footer class="mx-auto max-w-6xl px-5 pb-16 pt-8 sm:px-8">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-t theme-border pt-8 text-sm theme-muted">
+        <span>© <span id="footer-year">2026</span> Gaston Design</span>
+        <a href="#top" class="inline-flex items-center gap-1.5 transition-colors hover:text-cyanAccent">
+          Haut de page
+          <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+        </a>
+        <span>Paris &amp; Remote</span>
+      </div>
+    </footer>
+  </main>
+
+  <!-- ========================================================================
+       TIROIR D'ÉTUDE DE CAS
+       ======================================================================== -->
+  <div id="case-study-drawer" class="drawer-backdrop fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true">
+    <div id="drawer-overlay-close" class="h-full flex-1"></div>
+
+    <div class="drawer-panel flex h-full w-full max-w-2xl flex-col justify-between overflow-y-auto border-l theme-border theme-surface p-6 shadow-2xl sm:p-10">
+      <div>
+        <div class="flex items-center justify-between border-b theme-border pb-6">
+          <div class="flex items-center gap-3">
+            <span id="drawer-number" class="rounded-full bg-cyanAccent/15 px-2.5 py-1 font-mono text-xs font-semibold text-cyanAccent">[01]</span>
+            <span id="drawer-category" class="text-xs uppercase tracking-wider theme-muted">Catégorie</span>
+          </div>
+          <button id="drawer-close-btn" type="button" aria-label="Fermer l'étude de cas" class="flex h-9 w-9 items-center justify-center rounded-full border theme-border theme-canvas theme-text transition-colors hover:border-cyanAccent">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+
+        <div class="mt-8">
+          <h2 id="drawer-title" class="text-2xl font-semibold tracking-tight theme-text sm:text-3xl">Titre du projet</h2>
+          <p id="drawer-subtitle" class="mt-3 text-base leading-relaxed theme-muted"></p>
+        </div>
+
+        <div id="drawer-metrics" class="mt-7 grid grid-cols-3 gap-3 rounded-2xl border theme-border theme-canvas p-4"></div>
+
+        <div class="mt-8 space-y-7">
+          <div>
+            <h3 class="mb-2 text-sm font-semibold text-cyanAccent">Le défi</h3>
+            <p id="drawer-challenge" class="text-sm leading-relaxed theme-text sm:text-base"></p>
+          </div>
+          <div class="rounded-2xl border theme-border theme-canvas p-5">
+            <h3 class="mb-2 text-sm font-semibold theme-text">Architecture &amp; décisions UI</h3>
+            <p id="drawer-architecture" class="text-sm leading-relaxed theme-muted"></p>
+            <div id="drawer-tags" class="mt-4 flex flex-wrap gap-2"></div>
+          </div>
+          <div>
+            <h3 class="mb-2 text-sm font-semibold text-amberAccent">Impact &amp; résultats</h3>
+            <p id="drawer-outcome" class="text-sm leading-relaxed theme-text sm:text-base"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-10 flex items-center justify-between gap-4 border-t theme-border pt-6">
+        <span class="text-xs theme-muted">Rôle : Lead UX/UI &amp; Front-end</span>
+        <button id="drawer-next-btn" type="button" class="inline-flex items-center gap-2 rounded-full bg-deepTeal px-5 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-cyanAccent dark:bg-cyanAccent dark:text-abyssal dark:hover:bg-amberAccent sm:text-sm">
+          Projet suivant
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+        </button>
+      </div>
+    </div>
   </div>
-</header>
 
-<div class="marquee"><div class="marquee-track">
-  <span>Branding</span><span>UI / UX</span><span>Motion</span><span>Direction artistique</span><span>Typographie</span><span>Web design</span>
-  <span>Branding</span><span>UI / UX</span><span>Motion</span><span>Direction artistique</span><span>Typographie</span><span>Web design</span>
-</div></div>
-
-<section id="work">
-  <div class="section-head reveal"><h2>Projets<br>sélectionnés</h2><small>(2022 — 2026)</small></div>
-  <div class="grid">
-    <div class="project reveal"><div class="thumb"><div class="art a1"><div class="shape"></div></div><div class="view">Bientôt en ligne</div></div><div class="meta"><h3>Solaris</h3><span>Identité de marque</span></div></div>
-    <div class="project reveal"><div class="thumb"><div class="art a2"><div class="shape"></div></div><div class="view">Bientôt en ligne</div></div><div class="meta"><h3>Nebula App</h3><span>UI / UX</span></div></div>
-    <div class="project reveal"><div class="thumb"><div class="art a3"><div class="shape"></div></div><div class="view">Bientôt en ligne</div></div><div class="meta"><h3>Maison Ambre</h3><span>Packaging</span></div></div>
-    <div class="project reveal"><div class="thumb"><div class="art a4"><div class="shape"></div></div><div class="view">Bientôt en ligne</div></div><div class="meta"><h3>Verdant</h3><span>Site web &amp; motion</span></div></div>
+  <!-- TOAST -->
+  <div id="toast-notification" class="pointer-events-none fixed bottom-6 left-1/2 z-50 -translate-x-1/2 translate-y-3 opacity-0 transition-all duration-300 ease-futuristic" role="status" aria-live="polite">
+    <div class="flex items-center gap-2.5 rounded-full border border-white/10 bg-deepTeal px-4 py-2.5 text-xs font-semibold text-white shadow-lg dark:bg-cyanAccent dark:text-abyssal">
+      <span class="h-2 w-2 rounded-full bg-amberAccent dark:bg-abyssal"></span>
+      <span id="toast-message">Action effectuée</span>
+    </div>
   </div>
-</section>
 
-<section id="about" class="about">
-  <p class="about-text" id="aboutText">Depuis plus de huit ans, j'aide des marques ambitieuses à trouver leur voix visuelle. Je crois qu'un bon design est simple, audacieux et profondément humain — il raconte une histoire et laisse une émotion.</p>
-  <div class="stats reveal">
-    <div class="stat"><b data-count="8">8+</b><span>Années d'expérience</span></div>
-    <div class="stat"><b data-count="120">120+</b><span>Projets livrés</span></div>
-    <div class="stat"><b data-count="45">45+</b><span>Clients satisfaits</span></div>
-    <div class="stat"><b data-count="12">12+</b><span>Prix &amp; distinctions</span></div>
-  </div>
-</section>
+  <script>
+    // ========================================================================
+    // DONNÉES
+    // ========================================================================
+    const EMAIL_ADDRESS = 'hello@gastondesign.com';
 
-<section id="services">
-  <div class="section-head reveal"><h2>Services</h2><small>Ce que je fais</small></div>
-  <div class="service reveal"><span class="n">01</span><h3>Identité de marque</h3><span class="arrow">→</span></div>
-  <div class="service reveal"><span class="n">02</span><h3>Design UI / UX</h3><span class="arrow">→</span></div>
-  <div class="service reveal"><span class="n">03</span><h3>Motion design</h3><span class="arrow">→</span></div>
-  <div class="service reveal"><span class="n">04</span><h3>Direction artistique</h3><span class="arrow">→</span></div>
-</section>
+    const PROJECTS_DATA = {
+      aether: {
+        id: 'aether',
+        next: 'kinetix',
+        number: '[01]',
+        category: 'SaaS & Data Visualization',
+        title: 'Aether OS — Console de Télémétrie Cloud',
+        subtitle: 'Refonte complète de l’expérience de supervision multi-clusters pour réduire le temps de diagnostic lors des incidents critiques.',
+        metrics: [
+          { label: 'Temps de diagnostic', value: '-46%' },
+          { label: 'Adoption équipe', value: '94%' },
+          { label: 'Score SUS', value: '89/100' }
+        ],
+        challenge: 'Les ingénieurs DevOps devaient jongler entre 6 onglets denses et des graphiques surchargés pour identifier l’origine d’un pic de latence, générant une fatigue cognitive importante sous pression.',
+        architecture: 'Introduction d’une grille modulaire à densité adaptative, hiérarchisation chromatique stricte (fond clair apaisant, cyan pour les flux nominaux, ambre uniquement pour les alertes) et création d’une palette de commandes clavier instantanée.',
+        tags: ['Architecture Information', 'Design System', 'Data-Viz SVG', 'Accessibilité AAA'],
+        outcome: 'Réduction de près de moitié du temps moyen de résolution (MTTR) dès les 6 premières semaines suivant le déploiement auprès de 12 000 utilisateurs actifs.',
+        previewSvg: `
+          <div class="flex justify-between items-center font-mono text-[10px] theme-muted">
+            <span class="text-cyanAccent font-semibold">[01] AETHER CLOUD</span>
+            <span>12ms LATENCE</span>
+          </div>
+          <div class="my-auto p-3 rounded-xl theme-canvas border theme-border">
+            <svg class="w-full h-24 overflow-visible" viewBox="0 0 220 70" fill="none">
+              <path d="M0 58 Q 40 50, 75 32 T 145 24 T 220 8" stroke="#2BA4AC" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="145" cy="24" r="4" fill="#2BA4AC"/>
+              <circle cx="220" cy="8" r="4.5" fill="#F39322"/>
+            </svg>
+          </div>
+          <div class="font-mono text-[10px] theme-muted flex justify-between">
+            <span>TÉLÉMÉTRIE TEMPS RÉEL</span>
+            <span class="theme-text">99.98% UPTIME</span>
+          </div>
+        `
+      },
+      kinetix: {
+        id: 'kinetix',
+        next: 'prisma',
+        number: '[02]',
+        category: 'Fintech & Mobile App',
+        title: 'Kinetix — Trésorerie Automatisée B2B',
+        subtitle: 'Conception d’une application mobile et web permettant aux directeurs financiers de piloter leurs flux multi-devises en temps réel.',
+        metrics: [
+          { label: 'Validation virements', value: '8 sec' },
+          { label: 'Conversion onboarding', value: '+34%' },
+          { label: 'Note App Store', value: '4.9 ★' }
+        ],
+        challenge: 'Les outils bancaires d’entreprise souffrent d’interfaces rigides et anxiogènes. L’enjeu était d’apporter la fluidité d’une néobanque grand public tout en conservant une traçabilité comptable irréprochable.',
+        architecture: 'Développement d’un système de cartes virtuelles interactives, gestes de validation biométrique sécurisés et tableau prévisionnel de trésorerie par glissement temporel.',
+        tags: ['Mobile-First', 'Micro-Interactions', 'Parcours KYC', 'Prototypage'],
+        outcome: 'Augmentation de 34% du taux d’activation des comptes entreprises et validation des virements groupés en moins de 8 secondes.',
+        previewSvg: `
+          <div class="flex justify-between items-center font-mono text-[10px] theme-muted">
+            <span class="text-cyanAccent font-semibold">[02] KINETIX PAY</span>
+            <span class="text-amberAccent">ISO 20022</span>
+          </div>
+          <div class="my-auto bg-deepTeal text-white rounded-xl p-4 border border-cyanAccent/30 flex flex-col justify-between h-28">
+            <div class="flex justify-between font-mono text-[9px] opacity-70">
+              <span>CORP TREASURY</span>
+              <span>•••• 4829</span>
+            </div>
+            <div class="text-xl font-bold tracking-tight">148 920,00 €</div>
+            <div class="font-mono text-[9px] text-cyanAccent">+4.15% YIELD ACTIF</div>
+          </div>
+          <div class="font-mono text-[10px] theme-muted flex justify-between">
+            <span>VALIDATION BIOMÉTRIQUE</span>
+            <span class="theme-text">8 SEC</span>
+          </div>
+        `
+      },
+      prisma: {
+        id: 'prisma',
+        next: 'lumina',
+        number: '[03]',
+        category: 'Design System & Tokens',
+        title: 'Prisma — Architecture Multi-Marques',
+        subtitle: 'Création d’un langage visuel unifié et d’une bibliothèque de 140+ composants synchronisés entre Figma et React.',
+        metrics: [
+          { label: 'Vélocité UI', value: 'x2.4' },
+          { label: 'Composants', value: '142' },
+          { label: 'Dette visuelle', value: '-78%' }
+        ],
+        challenge: 'Quatre produits distincts du groupe présentaient des incohérences d’interaction, des contrastes insuffisants et une duplication constante du code front-end.',
+        architecture: 'Structuration d’une architecture de jetons (Design Tokens) à trois niveaux (Primitifs, Sémantiques, Composants) via Figma Variables, couplée à une documentation interactive Storybook.',
+        tags: ['Figma Variables', 'Tokens JSON', 'React / Tailwind', 'Gouvernance UI'],
+        outcome: 'Division par deux du temps de livraison des nouvelles fonctionnalités et conformité WCAG AA/AAA sur l’ensemble de l’écosystème.',
+        previewSvg: `
+          <div class="flex justify-between items-center font-mono text-[10px] theme-muted">
+            <span class="text-cyanAccent font-semibold">[03] PRISMA TOKENS</span>
+            <span>v3.0</span>
+          </div>
+          <div class="my-auto grid grid-cols-3 gap-2">
+            <div class="p-2.5 rounded-xl theme-canvas border theme-border text-center">
+              <div class="text-xl font-bold theme-text">Aa</div>
+              <div class="font-mono text-[8px] theme-muted mt-1">SCALE 1.25</div>
+            </div>
+            <div class="p-2.5 rounded-xl theme-canvas border theme-border flex flex-col justify-center gap-1.5">
+              <div class="h-2.5 w-full rounded-full bg-cyanAccent"></div>
+              <div class="h-2.5 w-2/3 rounded-full bg-amberAccent"></div>
+            </div>
+            <div class="p-2.5 rounded-xl theme-canvas border theme-border text-center flex flex-col justify-center">
+              <div class="text-sm font-bold text-cyanAccent">142</div>
+              <div class="font-mono text-[8px] theme-muted">COMPOSANTS</div>
+            </div>
+          </div>
+          <div class="font-mono text-[10px] theme-muted flex justify-between">
+            <span>FIGMA ↔ REACT</span>
+            <span class="theme-text">WCAG AAA</span>
+          </div>
+        `
+      },
+      lumina: {
+        id: 'lumina',
+        next: 'aether',
+        number: '[04]',
+        category: 'HealthTech & IA',
+        title: 'Lumina — Copilote de Diagnostic Clinique',
+        subtitle: 'Interface d’imagerie médicale assistée par IA conçue en co-création avec 35 radiologues et praticiens hospitaliers.',
+        metrics: [
+          { label: 'Temps d’analyse', value: '-42%' },
+          { label: 'Précision perçue', value: '97%' },
+          { label: 'Centres équipés', value: '18' }
+        ],
+        challenge: 'Les algorithmes d’IA génèrent souvent trop de faux positifs visuels qui polluent la lecture des clichés médicaux et ralentissent le praticien.',
+        architecture: 'Conception d’un mode « Calme Clinique » : les annotations IA restent invisibles par défaut et se révèlent par un survol magnétique doux avec indice de confiance expliqué en langage clair.',
+        tags: ['Recherche Terrain', 'IA Explicable', 'Ergonomie Cognitive', 'Prototypage'],
+        outcome: 'Adopté dans 18 établissements hospitaliers avec une baisse mesurée de 42% du temps de lecture par dossier patient.',
+        previewSvg: `
+          <div class="flex justify-between items-center font-mono text-[10px] theme-muted">
+            <span class="text-cyanAccent font-semibold">[04] LUMINA IA</span>
+            <span>CERTIFIÉ CE</span>
+          </div>
+          <div class="my-auto flex items-center justify-center p-2 rounded-xl theme-canvas border theme-border">
+            <svg class="w-24 h-24" viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="50" r="38" stroke="#2BA4AC" stroke-opacity="0.35" stroke-dasharray="3 3"/>
+              <circle cx="50" cy="50" r="22" stroke="#2BA4AC" stroke-width="1.5"/>
+              <circle cx="50" cy="50" r="10" fill="#2BA4AC" fill-opacity="0.25"/>
+              <circle cx="66" cy="34" r="4" fill="#F39322"/>
+            </svg>
+          </div>
+          <div class="font-mono text-[10px] theme-muted flex justify-between">
+            <span>DIAGNOSTIC ASSISTÉ</span>
+            <span class="text-cyanAccent font-semibold">-42% TEMPS</span>
+          </div>
+        `
+      }
+    };
+    const PROJECT_ORDER = ['aether', 'kinetix', 'prisma', 'lumina'];
 
-<section id="contact" class="contact">
-  <h2 class="reveal">Créons<br><em style="font-style:normal;color:var(--accent)">ensemble.</em></h2>
-  <a href="mailto:hello@gastondesign.com" class="btn magnetic"><span>Me contacter</span></a>
-</section>
+    const SKILLS_DATA = [
+      'Figma & Variables',
+      'React & TypeScript',
+      'HTML / CSS & Tailwind',
+      'Design Systems',
+      'Prototypage interactif',
+      'Recherche utilisateur',
+      'Accessibilité WCAG',
+      'Adobe Illustrator',
+    ];
 
-<footer>
-  <span>© 2026 Gaston Design</span>
-  <div class="socials"><span>Dribbble</span><span>Behance</span><span>Instagram</span><span>LinkedIn</span></div>
-</footer>
+    const PILLARS_DATA = [
+      {
+        title: 'Comprendre',
+        description: 'Cadrage, recherche utilisateur, audits heuristiques et analyse des parcours pour réduire la friction.',
+      },
+      {
+        title: 'Concevoir',
+        description: 'Architecture de l’information, interfaces et design systems documentés, à base de jetons de design.',
+      },
+      {
+        title: 'Livrer',
+        description: 'Intégration front-end soignée, micro-interactions, tests et itérations au plus près de la production.',
+      },
+    ];
 
-<script>
-const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
-// Loader
-const countEl=document.getElementById('count');let c=0;
-if(reduceMotion)document.body.classList.add('loaded');
-const t=reduceMotion?0:setInterval(()=>{c+=Math.ceil(Math.random()*12);if(c>=100){c=100;clearInterval(t);setTimeout(()=>document.body.classList.add('loaded'),250)}countEl.textContent=c},40);
+    const EXPERIENCE_DATA = [
+      {
+        period: '2023 — Auj.',
+        role: 'Lead Product Designer & Front-end',
+        company: 'Indépendant · Paris & Remote',
+        description: 'Accompagnement de scale-ups SaaS, fintech et healthtech : cadrage UX, design systems et intégration React.',
+      },
+      {
+        period: '2020 — 2023',
+        role: 'Senior UX/UI Designer',
+        company: 'Studio produit',
+        description: 'Conception de plateformes B2B, création d’une bibliothèque de 140+ composants synchronisés Figma ↔ React.',
+      },
+      {
+        period: '2018 — 2020',
+        role: 'UI Designer & Intégrateur',
+        company: 'Agence digitale',
+        description: 'Interfaces web et mobiles, prototypage interactif et intégration HTML / CSS pour des marques grand public.',
+      },
+    ];
 
-// Cursor
-const cur=document.querySelector('.cursor'),dot=document.querySelector('.cursor-dot');
-if(!reduceMotion){
-let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
-addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.transform=`translate(${mx-3}px,${my-3}px)`});
-(function loop(){cx+=(mx-cx)*.15;cy+=(my-cy)*.15;cur.style.transform=`translate(${cx-cur.offsetWidth/2}px,${cy-cur.offsetHeight/2}px)`;requestAnimationFrame(loop)})();
-dot.style.transform='translate(-100px,-100px)';
-document.querySelectorAll('a,.service,.project').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('hover'));el.addEventListener('mouseleave',()=>cur.classList.remove('hover'))});
-}
+    const SOCIAL_LINKS = [
+      { label: 'LinkedIn', url: 'https://www.linkedin.com/' },
+      { label: 'Dribbble', url: 'https://dribbble.com/' },
+    ];
 
-// Scroll reveal
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+    // ========================================================================
+    // UTILITAIRES
+    // ========================================================================
+    const escapeHtml = (value) =>
+      String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 
-// Counters
-const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.querySelectorAll('[data-count]').forEach(b=>{const end=+b.dataset.count;if(reduceMotion){b.textContent=end+'+';return}const s=performance.now();(function step(n){const p=Math.min((n-s)/1800,1);b.textContent=Math.round(end*(1-Math.pow(1-p,3)))+(p===1?'+':'');if(p<1)requestAnimationFrame(step)})(s)});co.unobserve(e.target)}),{threshold:.4});
-if(!reduceMotion)document.querySelectorAll('[data-count]').forEach(b=>b.textContent='0');
-co.observe(document.querySelector('.stats'));
+    const ARROW_UP_RIGHT = '<svg class="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M9 7h8v8" /></svg>';
 
-// Word-by-word about text
-const at=document.getElementById('aboutText');
-at.innerHTML=at.textContent.split(' ').map(w=>`<span class="w">${w}</span>`).join(' ');
-const words=at.querySelectorAll('.w');
-function onScroll(){
-  const r=at.getBoundingClientRect(),p=Math.min(Math.max((innerHeight*.85-r.top)/(r.height+innerHeight*.4),0),1);
-  if(!reduceMotion)words.forEach((w,i)=>w.classList.toggle('on',i/words.length<p));
-  document.querySelector('.progress').style.width=(scrollY/(document.body.scrollHeight-innerHeight)*100)+'%';
-}
-addEventListener('scroll',onScroll,{passive:true});onScroll();
+    function projectVisual(project, aspectClass) {
+      return `
+        <div class="${aspectClass} overflow-hidden border-b theme-border bg-gradient-to-br from-cyanAccent/[0.06] via-transparent to-amberAccent/[0.05]">
+          <div class="card-visual flex h-full items-center justify-center p-6 sm:p-10">
+            <div class="flex aspect-[340/245] w-full max-w-sm flex-col justify-between rounded-2xl border theme-border theme-surface p-4 shadow-sm">
+              ${project.previewSvg}
+            </div>
+          </div>
+        </div>`;
+    }
 
-// 3D tilt on project cards
-if(!reduceMotion)document.querySelectorAll('.thumb').forEach(th=>{
-  th.addEventListener('mousemove',e=>{const r=th.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;th.style.transform=`perspective(900px) rotateY(${x*10}deg) rotateX(${-y*10}deg)`});
-  th.addEventListener('mouseleave',()=>th.style.transform='');
-});
+    function projectMeta(project) {
+      return `
+        <div class="flex items-center justify-between text-xs theme-muted">
+          <span>${escapeHtml(project.category)}</span>
+          <span class="font-mono">${escapeHtml(project.number)}</span>
+        </div>`;
+    }
 
-// Magnetic button
-if(!reduceMotion)document.querySelectorAll('.magnetic').forEach(b=>{
-  b.addEventListener('mousemove',e=>{const r=b.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2;b.style.transform=`translate(${x*.35}px,${y*.35}px)`;b.firstElementChild.style.transform=`translate(${x*.15}px,${y*.15}px)`});
-  b.addEventListener('mouseleave',()=>{b.style.transform='';b.firstElementChild.style.transform=''});
-});
-</script>
+    // ========================================================================
+    // RENDU DES SECTIONS
+    // ========================================================================
+    function renderProjects() {
+      const [featuredId, ...restIds] = PROJECT_ORDER;
+      const featured = PROJECTS_DATA[featuredId];
+
+      document.getElementById('featured-project').innerHTML = `
+        <article role="button" tabindex="0" data-project="${featured.id}" aria-label="Ouvrir l’étude de cas ${escapeHtml(featured.title)}" class="reveal editorial-card group mb-6 cursor-pointer lg:grid lg:grid-cols-12">
+          <div class="lg:col-span-7 lg:border-r theme-border">${projectVisual(featured, 'aspect-[16/10] lg:aspect-auto lg:h-full lg:border-b-0')}</div>
+          <div class="flex flex-col justify-center p-6 sm:p-8 lg:col-span-5">
+            ${projectMeta(featured)}
+            <h3 class="mt-3 text-2xl font-semibold tracking-tight theme-text transition-colors group-hover:text-cyanAccent sm:text-3xl">${escapeHtml(featured.title)}</h3>
+            <p class="mt-3 text-sm leading-relaxed theme-muted">${escapeHtml(featured.subtitle)}</p>
+            <div class="mt-6 grid grid-cols-3 gap-3 border-t theme-border pt-5">
+              ${featured.metrics.map((metric) => `
+                <div>
+                  <div class="text-lg font-semibold tracking-tight theme-text">${escapeHtml(metric.value)}</div>
+                  <div class="mt-0.5 text-[11px] leading-tight theme-muted">${escapeHtml(metric.label)}</div>
+                </div>`).join('')}
+            </div>
+            <span class="mt-6 inline-flex items-center gap-2 text-sm font-medium text-cyanAccent">Voir l’étude de cas ${ARROW_UP_RIGHT}</span>
+          </div>
+        </article>`;
+
+      document.getElementById('projects-grid').innerHTML = restIds
+        .map((id) => PROJECTS_DATA[id])
+        .map((project, index) => {
+          const isWide = index === restIds.length - 1 && restIds.length % 2 === 1;
+          return `
+          <article role="button" tabindex="0" data-project="${project.id}" aria-label="Ouvrir l’étude de cas ${escapeHtml(project.title)}" class="reveal editorial-card group cursor-pointer ${isWide ? 'md:col-span-2' : ''}" style="transition-delay: ${(index % 2) * 80}ms;">
+            ${projectVisual(project, isWide ? 'aspect-[16/10] md:aspect-[21/8]' : 'aspect-[16/10]')}
+            <div class="p-6">
+              ${projectMeta(project)}
+              <h3 class="mt-3 text-xl font-semibold theme-text transition-colors group-hover:text-cyanAccent">${escapeHtml(project.title)}</h3>
+              <p class="mt-2 line-clamp-2 text-sm theme-muted">${escapeHtml(project.subtitle)}</p>
+              <span class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-cyanAccent">Voir l’étude de cas ${ARROW_UP_RIGHT}</span>
+            </div>
+          </article>`;
+        })
+        .join('');
+    }
+
+    function renderApproach() {
+      document.getElementById('skills-list').innerHTML = SKILLS_DATA.map((skill) => `
+        <span class="rounded-full border theme-border theme-surface px-3.5 py-1.5 text-xs theme-muted">${escapeHtml(skill)}</span>`).join('');
+
+      document.getElementById('pillars-list').innerHTML = PILLARS_DATA.map((pillar, index) => `
+        <div class="reveal rounded-3xl border theme-border theme-surface p-6" style="transition-delay: ${index * 80}ms;">
+          <span class="font-mono text-xs text-cyanAccent">${String(index + 1).padStart(2, '0')}</span>
+          <h3 class="mt-2 text-lg font-semibold theme-text">${escapeHtml(pillar.title)}</h3>
+          <p class="mt-2 text-sm leading-relaxed theme-muted">${escapeHtml(pillar.description)}</p>
+        </div>`).join('');
+    }
+
+    function renderExperience() {
+      document.getElementById('experience-list').innerHTML = EXPERIENCE_DATA.map((item) => `
+        <div class="reveal grid gap-3 border-b theme-border py-6 sm:grid-cols-[150px_1fr]">
+          <span class="font-semibold text-cyanAccent">${escapeHtml(item.period)}</span>
+          <div>
+            <h3 class="text-lg font-semibold theme-text">${escapeHtml(item.role)}</h3>
+            <p class="mt-1 text-sm theme-muted">${escapeHtml(item.company)}</p>
+            ${item.description ? `<p class="mt-2 max-w-2xl text-sm leading-relaxed theme-muted">${escapeHtml(item.description)}</p>` : ''}
+          </div>
+        </div>`).join('');
+    }
+
+    function renderContact() {
+      document.getElementById('social-links').innerHTML = SOCIAL_LINKS.slice(0, 2).map((link) => `
+        <a href="${escapeHtml(link.url)}" target="_blank" rel="noreferrer" class="group inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3.5 text-sm font-medium text-white transition-colors hover:border-white">
+          ${escapeHtml(link.label)} ${ARROW_UP_RIGHT}
+        </a>`).join('');
+      document.querySelectorAll('[data-email-label]').forEach((el) => { el.textContent = EMAIL_ADDRESS; });
+      document.getElementById('footer-year').textContent = new Date().getFullYear();
+    }
+
+    renderProjects();
+    renderApproach();
+    renderExperience();
+    renderContact();
+
+    // ========================================================================
+    // TOAST
+    // ========================================================================
+    const toastEl = document.getElementById('toast-notification');
+    const toastMsgEl = document.getElementById('toast-message');
+    let toastTimeout;
+
+    function showToast(message) {
+      toastMsgEl.textContent = message;
+      toastEl.classList.remove('opacity-0', 'translate-y-3');
+      toastEl.classList.add('opacity-100', 'translate-y-0');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toastEl.classList.remove('opacity-100', 'translate-y-0');
+        toastEl.classList.add('opacity-0', 'translate-y-3');
+      }, 2600);
+    }
+
+    // ========================================================================
+    // THÈME CLAIR / SOMBRE
+    // ========================================================================
+    const htmlEl = document.documentElement;
+
+    document.getElementById('theme-toggle-btn').addEventListener('click', () => {
+      const isDark = htmlEl.classList.toggle('dark');
+      try { localStorage.setItem('portfolio-theme', isDark ? 'dark' : 'light'); } catch (e) {}
+      showToast(isDark ? 'Mode sombre activé' : 'Mode clair activé');
+    });
+
+    // ========================================================================
+    // MENU MOBILE
+    // ========================================================================
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+
+    function setMobileMenu(open) {
+      mobileMenu.classList.toggle('open', open);
+      mobileMenuBtn.setAttribute('aria-expanded', String(open));
+      mobileMenuBtn.setAttribute('aria-label', open ? 'Fermer le menu mobile' : 'Ouvrir le menu mobile');
+      document.getElementById('icon-menu').classList.toggle('hidden', open);
+      document.getElementById('icon-close').classList.toggle('hidden', !open);
+    }
+
+    mobileMenuBtn.addEventListener('click', () => setMobileMenu(!mobileMenu.classList.contains('open')));
+    document.querySelectorAll('.mobile-link').forEach((link) => link.addEventListener('click', () => setMobileMenu(false)));
+
+    // ========================================================================
+    // SECTION ACTIVE DANS LA NAVIGATION
+    // ========================================================================
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    function setActiveNav(id) {
+      navLinks.forEach((link) => {
+        const active = link.dataset.nav === id;
+        link.classList.toggle('bg-[var(--accent-soft)]', active);
+        link.classList.toggle('font-semibold', active);
+        link.classList.toggle('text-cyanAccent', active);
+        link.classList.toggle('theme-muted', !active);
+        if (active) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      });
+    }
+
+    const OBSERVED_SECTIONS = ['hero', 'projets', 'approche', 'experience', 'contact'];
+    const sectionsInBand = new Set();
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const id = entry.target.id.replace('section-', '');
+        if (entry.isIntersecting) sectionsInBand.add(id);
+        else sectionsInBand.delete(id);
+      });
+      const current = OBSERVED_SECTIONS.filter((id) => sectionsInBand.has(id)).pop();
+      if (current) setActiveNav(current);
+    }, { rootMargin: '-45% 0px -50% 0px' });
+
+    OBSERVED_SECTIONS.forEach((id) => {
+      sectionObserver.observe(document.getElementById(`section-${id}`));
+    });
+
+    // ========================================================================
+    // APPARITION AU SCROLL
+    // ========================================================================
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
+
+    document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+
+
+    // ========================================================================
+    // TIROIR D'ÉTUDE DE CAS
+    // ========================================================================
+    const drawer = document.getElementById('case-study-drawer');
+    let currentProjectId = PROJECT_ORDER[0];
+    let lastFocusedElement = null;
+
+    function setPageInert(isInert) {
+      document.querySelectorAll('body > header, body > main').forEach((el) => { el.inert = isInert; });
+      drawer.inert = !isInert;
+    }
+
+    drawer.inert = true;
+
+    function openCaseStudy(projectKey) {
+      const data = PROJECTS_DATA[projectKey];
+      if (!data) return;
+      currentProjectId = projectKey;
+      if (!drawer.classList.contains('open')) lastFocusedElement = document.activeElement;
+
+      document.getElementById('drawer-number').textContent = data.number;
+      document.getElementById('drawer-category').textContent = data.category;
+      document.getElementById('drawer-title').textContent = data.title;
+      document.getElementById('drawer-subtitle').textContent = data.subtitle;
+      document.getElementById('drawer-challenge').textContent = data.challenge;
+      document.getElementById('drawer-architecture').textContent = data.architecture;
+      document.getElementById('drawer-outcome').textContent = data.outcome;
+
+      document.getElementById('drawer-metrics').innerHTML = data.metrics.map((metric) => `
+        <div class="text-center">
+          <div class="text-lg font-semibold tracking-tight theme-text sm:text-xl">${escapeHtml(metric.value)}</div>
+          <div class="mt-0.5 text-[11px] theme-muted">${escapeHtml(metric.label)}</div>
+        </div>`).join('');
+
+      document.getElementById('drawer-tags').innerHTML = data.tags.map((tag) => `
+        <span class="rounded-full border theme-border theme-surface px-2.5 py-1 text-[11px] theme-text">${escapeHtml(tag)}</span>`).join('');
+
+      drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden', 'false');
+      setPageInert(true);
+      drawer.querySelector('.drawer-panel').scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+      document.getElementById('drawer-close-btn').focus({ preventScroll: true });
+    }
+
+    function closeCaseStudy() {
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
+      setPageInert(false);
+      document.body.style.overflow = '';
+      if (lastFocusedElement) lastFocusedElement.focus({ preventScroll: true });
+    }
+
+    document.querySelectorAll('[data-project]').forEach((el) => {
+      el.addEventListener('click', () => openCaseStudy(el.dataset.project));
+      el.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openCaseStudy(el.dataset.project);
+        }
+      });
+    });
+
+    document.getElementById('drawer-close-btn').addEventListener('click', closeCaseStudy);
+    document.getElementById('drawer-overlay-close').addEventListener('click', closeCaseStudy);
+    document.getElementById('drawer-next-btn').addEventListener('click', () => {
+      openCaseStudy(PROJECTS_DATA[currentProjectId]?.next || PROJECT_ORDER[0]);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        if (drawer.classList.contains('open')) closeCaseStudy();
+        else if (mobileMenu.classList.contains('open')) setMobileMenu(false);
+      }
+    });
+
+    // ========================================================================
+    // COPIE D'E-MAIL
+    // ========================================================================
+    async function copyEmailToClipboard() {
+      try {
+        await navigator.clipboard.writeText(EMAIL_ADDRESS);
+      } catch (error) {
+        const tempInput = document.createElement('input');
+        tempInput.value = EMAIL_ADDRESS;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(tempInput);
+      }
+      showToast('Adresse e-mail copiée dans le presse-papiers');
+    }
+
+    document.querySelectorAll('[data-copy-email]').forEach((btn) => btn.addEventListener('click', copyEmailToClipboard));
+  </script>
 </body>
 </html>
