@@ -140,7 +140,7 @@ footer a:hover{color:var(--fg)}
   .contact h2{font-size:10.5vw}
   footer .socials{flex-wrap:wrap;gap:1rem 1.5rem}
 }
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal,.line span{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}body{cursor:auto}.cursor,.cursor-dot,.loader{display:none}.reveal,.line span{opacity:1;transform:none}.about-text .w{opacity:1}}
 </style>
 </head>
 <body>
@@ -181,10 +181,10 @@ footer a:hover{color:var(--fg)}
 <section id="work">
   <div class="section-head reveal"><h2>Projets<br>sélectionnés</h2><small>(2022 — 2026)</small></div>
   <div class="grid">
-    <a class="project reveal" href="#"><div class="thumb"><div class="art a1"><div class="shape"></div></div><div class="view">Voir le projet →</div></div><div class="meta"><h3>Solaris</h3><span>Identité de marque</span></div></a>
-    <a class="project reveal" href="#"><div class="thumb"><div class="art a2"><div class="shape"></div></div><div class="view">Voir le projet →</div></div><div class="meta"><h3>Nebula App</h3><span>UI / UX</span></div></a>
-    <a class="project reveal" href="#"><div class="thumb"><div class="art a3"><div class="shape"></div></div><div class="view">Voir le projet →</div></div><div class="meta"><h3>Maison Ambre</h3><span>Packaging</span></div></a>
-    <a class="project reveal" href="#"><div class="thumb"><div class="art a4"><div class="shape"></div></div><div class="view">Voir le projet →</div></div><div class="meta"><h3>Verdant</h3><span>Site web &amp; motion</span></div></a>
+    <div class="project reveal"><div class="thumb"><div class="art a1"><div class="shape"></div></div><div class="view">Bientôt en ligne</div></div><div class="meta"><h3>Solaris</h3><span>Identité de marque</span></div></div>
+    <div class="project reveal"><div class="thumb"><div class="art a2"><div class="shape"></div></div><div class="view">Bientôt en ligne</div></div><div class="meta"><h3>Nebula App</h3><span>UI / UX</span></div></div>
+    <div class="project reveal"><div class="thumb"><div class="art a3"><div class="shape"></div></div><div class="view">Bientôt en ligne</div></div><div class="meta"><h3>Maison Ambre</h3><span>Packaging</span></div></div>
+    <div class="project reveal"><div class="thumb"><div class="art a4"><div class="shape"></div></div><div class="view">Bientôt en ligne</div></div><div class="meta"><h3>Verdant</h3><span>Site web &amp; motion</span></div></div>
   </div>
 </section>
 
@@ -213,28 +213,32 @@ footer a:hover{color:var(--fg)}
 
 <footer>
   <span>© 2026 Gaston Design</span>
-  <div class="socials"><a href="#">Dribbble</a><a href="#">Behance</a><a href="#">Instagram</a><a href="#">LinkedIn</a></div>
+  <div class="socials"><span>Dribbble</span><span>Behance</span><span>Instagram</span><span>LinkedIn</span></div>
 </footer>
 
 <script>
+const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 // Loader
 const countEl=document.getElementById('count');let c=0;
-const t=setInterval(()=>{c+=Math.ceil(Math.random()*12);if(c>=100){c=100;clearInterval(t);setTimeout(()=>document.body.classList.add('loaded'),250)}countEl.textContent=c},40);
+if(reduceMotion)document.body.classList.add('loaded');
+const t=reduceMotion?0:setInterval(()=>{c+=Math.ceil(Math.random()*12);if(c>=100){c=100;clearInterval(t);setTimeout(()=>document.body.classList.add('loaded'),250)}countEl.textContent=c},40);
 
 // Cursor
 const cur=document.querySelector('.cursor'),dot=document.querySelector('.cursor-dot');
+if(!reduceMotion){
 let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
 addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.transform=`translate(${mx-3}px,${my-3}px)`});
 (function loop(){cx+=(mx-cx)*.15;cy+=(my-cy)*.15;cur.style.transform=`translate(${cx-cur.offsetWidth/2}px,${cy-cur.offsetHeight/2}px)`;requestAnimationFrame(loop)})();
 dot.style.transform='translate(-100px,-100px)';
-document.querySelectorAll('a,.service').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('hover'));el.addEventListener('mouseleave',()=>cur.classList.remove('hover'))});
+document.querySelectorAll('a,.service,.project').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('hover'));el.addEventListener('mouseleave',()=>cur.classList.remove('hover'))});
+}
 
 // Scroll reveal
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 // Counters
-const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.querySelectorAll('[data-count]').forEach(b=>{const end=+b.dataset.count,s=performance.now();(function step(n){const p=Math.min((n-s)/1800,1);b.textContent=Math.round(end*(1-Math.pow(1-p,3)))+(p===1?'+':'');if(p<1)requestAnimationFrame(step)})(s)});co.unobserve(e.target)}),{threshold:.4});
+const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.querySelectorAll('[data-count]').forEach(b=>{const end=+b.dataset.count;if(reduceMotion){b.textContent=end+'+';return}const s=performance.now();(function step(n){const p=Math.min((n-s)/1800,1);b.textContent=Math.round(end*(1-Math.pow(1-p,3)))+(p===1?'+':'');if(p<1)requestAnimationFrame(step)})(s)});co.unobserve(e.target)}),{threshold:.4});
 co.observe(document.querySelector('.stats'));
 
 // Word-by-word about text
@@ -243,19 +247,19 @@ at.innerHTML=at.textContent.split(' ').map(w=>`<span class="w">${w}</span>`).joi
 const words=at.querySelectorAll('.w');
 function onScroll(){
   const r=at.getBoundingClientRect(),p=Math.min(Math.max((innerHeight*.85-r.top)/(r.height+innerHeight*.4),0),1);
-  words.forEach((w,i)=>w.classList.toggle('on',i/words.length<p));
+  if(!reduceMotion)words.forEach((w,i)=>w.classList.toggle('on',i/words.length<p));
   document.querySelector('.progress').style.width=(scrollY/(document.body.scrollHeight-innerHeight)*100)+'%';
 }
 addEventListener('scroll',onScroll,{passive:true});onScroll();
 
 // 3D tilt on project cards
-document.querySelectorAll('.thumb').forEach(th=>{
+if(!reduceMotion)document.querySelectorAll('.thumb').forEach(th=>{
   th.addEventListener('mousemove',e=>{const r=th.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;th.style.transform=`perspective(900px) rotateY(${x*10}deg) rotateX(${-y*10}deg)`});
   th.addEventListener('mouseleave',()=>th.style.transform='');
 });
 
 // Magnetic button
-document.querySelectorAll('.magnetic').forEach(b=>{
+if(!reduceMotion)document.querySelectorAll('.magnetic').forEach(b=>{
   b.addEventListener('mousemove',e=>{const r=b.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2;b.style.transform=`translate(${x*.35}px,${y*.35}px)`;b.firstElementChild.style.transform=`translate(${x*.15}px,${y*.15}px)`});
   b.addEventListener('mouseleave',()=>{b.style.transform='';b.firstElementChild.style.transform=''});
 });
