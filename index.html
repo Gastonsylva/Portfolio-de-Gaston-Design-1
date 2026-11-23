@@ -192,10 +192,10 @@ footer a:hover{color:var(--fg)}
 <section id="about" class="about">
   <p class="about-text" id="aboutText">Depuis plus de huit ans, j'aide des marques ambitieuses à trouver leur voix visuelle. Je crois qu'un bon design est simple, audacieux et profondément humain — il raconte une histoire et laisse une émotion.</p>
   <div class="stats reveal">
-    <div class="stat"><b data-count="8">0</b><span>Années d'expérience</span></div>
-    <div class="stat"><b data-count="120">0</b><span>Projets livrés</span></div>
-    <div class="stat"><b data-count="45">0</b><span>Clients satisfaits</span></div>
-    <div class="stat"><b data-count="12">0</b><span>Prix &amp; distinctions</span></div>
+    <div class="stat"><b data-count="8">8+</b><span>Années d'expérience</span></div>
+    <div class="stat"><b data-count="120">120+</b><span>Projets livrés</span></div>
+    <div class="stat"><b data-count="45">45+</b><span>Clients satisfaits</span></div>
+    <div class="stat"><b data-count="12">12+</b><span>Prix &amp; distinctions</span></div>
   </div>
 </section>
 
@@ -240,6 +240,7 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 // Counters
 const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.querySelectorAll('[data-count]').forEach(b=>{const end=+b.dataset.count;if(reduceMotion){b.textContent=end+'+';return}const s=performance.now();(function step(n){const p=Math.min((n-s)/1800,1);b.textContent=Math.round(end*(1-Math.pow(1-p,3)))+(p===1?'+':'');if(p<1)requestAnimationFrame(step)})(s)});co.unobserve(e.target)}),{threshold:.4});
+if(!reduceMotion)document.querySelectorAll('[data-count]').forEach(b=>b.textContent='0');
 co.observe(document.querySelector('.stats'));
 
 // Word-by-word about text
