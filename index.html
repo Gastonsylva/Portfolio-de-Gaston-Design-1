@@ -128,14 +128,17 @@
     /* Menu mobile */
     #mobile-menu {
       opacity: 0;
+      visibility: hidden;
       transform: translateY(-8px);
       pointer-events: none;
-      transition: opacity 0.22s var(--ease-out-expo), transform 0.22s var(--ease-out-expo);
+      transition: opacity 0.22s var(--ease-out-expo), transform 0.22s var(--ease-out-expo), visibility 0s linear 0.22s;
     }
     #mobile-menu.open {
       opacity: 1;
+      visibility: visible;
       transform: translateY(0);
       pointer-events: auto;
+      transition-delay: 0s;
     }
 
     /* Tiroir d'étude de cas */
@@ -166,8 +169,8 @@
   <!-- ========================================================================
        HEADER
        ======================================================================== -->
-  <header class="fixed inset-x-0 top-0 z-40 px-4 pt-4 sm:px-8">
-    <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 rounded-full border theme-border px-4 py-2.5 backdrop-blur-xl" style="background-color: var(--bg-surface-elevated);">
+  <header class="pointer-events-none fixed inset-x-0 top-0 z-40 px-4 pt-4 sm:px-8">
+    <div class="pointer-events-auto mx-auto flex max-w-6xl items-center justify-between gap-3 rounded-full border theme-border px-4 py-2.5 backdrop-blur-xl" style="background-color: var(--bg-surface-elevated);">
       <a href="#top" class="flex items-center gap-2" aria-label="Retour en haut de page">
         <span class="flex h-8 w-8 items-center justify-center rounded-full bg-deepTeal font-mono text-xs font-semibold tracking-tighter text-white dark:bg-cyanAccent dark:text-abyssal">CL</span>
         <span class="text-sm font-semibold tracking-tight theme-text">Camille Laurent</span>
