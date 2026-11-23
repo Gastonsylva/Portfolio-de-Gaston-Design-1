@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Camille Laurent — Designer UX/UI & Développeur Front-end</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23012A2D'/%3E%3Ctext x='16' y='21' font-family='monospace' font-size='13' font-weight='600' fill='white' text-anchor='middle'%3ECL%3C/text%3E%3C/svg%3E" />
   <meta name="description" content="Portfolio de Camille Laurent : design produit, UX/UI, design systems et intégration front-end." />
 
   <script>
@@ -214,7 +215,7 @@
     <!-- ======================================================================
          HERO
          ====================================================================== -->
-    <section class="mx-auto max-w-6xl px-5 pb-16 pt-32 sm:px-8 sm:pb-24 sm:pt-40">
+    <section id="section-hero" class="mx-auto max-w-6xl px-5 pb-16 pt-32 sm:px-8 sm:pb-24 sm:pt-40">
       <div class="grid items-center gap-12 lg:grid-cols-12">
         <div class="reveal lg:col-span-7">
           <p class="text-sm font-medium text-cyanAccent">Designer UX/UI &amp; Développeur Front-end · Paris &amp; Remote</p>
@@ -803,7 +804,7 @@
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
 
-    ['projets', 'approche', 'experience', 'contact'].forEach((id) => {
+    ['hero', 'projets', 'approche', 'experience', 'contact'].forEach((id) => {
       sectionObserver.observe(document.getElementById(`section-${id}`));
     });
 
