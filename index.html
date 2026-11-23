@@ -798,13 +798,20 @@
       });
     }
 
+    const OBSERVED_SECTIONS = ['hero', 'projets', 'approche', 'experience', 'contact'];
+    const sectionsInBand = new Set();
+
     const sectionObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) setActiveNav(entry.target.id.replace('section-', ''));
+        const id = entry.target.id.replace('section-', '');
+        if (entry.isIntersecting) sectionsInBand.add(id);
+        else sectionsInBand.delete(id);
       });
+      const current = OBSERVED_SECTIONS.filter((id) => sectionsInBand.has(id)).pop();
+      if (current) setActiveNav(current);
     }, { rootMargin: '-45% 0px -50% 0px' });
 
-    ['hero', 'projets', 'approche', 'experience', 'contact'].forEach((id) => {
+    OBSERVED_SECTIONS.forEach((id) => {
       sectionObserver.observe(document.getElementById(`section-${id}`));
     });
 
